@@ -55,13 +55,27 @@ while (true) {
         break;
     }
     if (action === "add") {
-        let animal = readlineSync.question("Enter the animal's name: ");
-        let fee = Number(readlineSync.question("Enter the adoption fee: "));
-        addAnimal(animal, fee);
-        console.log(`${animal} added with a fee of $${fee}.`);
+        try {
+            let animal = readlineSync.question("Enter the animal's name: ");
+            if(!animal){
+                throw new Error("Animal name cannot be blank.");
+            }
+            let fee = Number(readlineSync.question("Enter the adoption fee: "));
+            if(fee < 0){
+                throw new Error("Adoption fee must be a positive dollar value.");
+            }
+            addAnimal(animal, fee);
+            console.log(`${animal} added with a fee of $${fee}.`);
+        } catch (err) {
+            console.log("Error", err.message);
+        }
     } else if (action === "fee") {
-        let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ");
-        console.log(`${animal}'s adoption fee is $${getAdoptionFee(animal)}.`);
+        try {
+            let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ");
+            console.log(`${animal}'s adoption fee is $${getAdoptionFee(animal)}.`);
+        }catch(err){
+            console.log("Error:", err.message);
+        }
     } else {
         console.log("Invalid action. Please choose 'add', 'fee', or 'exit'.");
     }
